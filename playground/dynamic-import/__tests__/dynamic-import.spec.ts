@@ -62,10 +62,7 @@ test('should load dynamic import with vars', async () => {
 // dynamic import css
 test('should load dynamic import with css', async () => {
   await page.click('.css')
-  await untilUpdated(
-    () => page.$eval('.view', (node) => window.getComputedStyle(node).color),
-    'rgb(255, 0, 0)',
-  )
+  await untilUpdated(() => getColor('.view'), 'red')
 })
 
 test('should load dynamic import with vars', async () => {
@@ -184,6 +181,7 @@ test('dynamic import treeshaken log', async () => {
   expect(log).toContain('treeshaken baz3')
   expect(log).toContain('treeshaken baz4')
   expect(log).toContain('treeshaken baz5')
+  expect(log).toContain('treeshaken baz6')
   expect(log).toContain('treeshaken default')
 
   expect(log).not.toContain('treeshaken removed')

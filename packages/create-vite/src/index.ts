@@ -148,7 +148,7 @@ const FRAMEWORKS: Framework[] = [
         display: 'TanStack Router ↗',
         color: cyan,
         customCommand:
-          'npm create -- tsrouter-app@latest TARGET_DIR --framework react --interactive',
+          'npm create -- tsrouter-app@latest TARGET_DIR --framework React --interactive',
       },
       {
         name: 'redwoodsdk-standard',
@@ -242,7 +242,7 @@ const FRAMEWORKS: Framework[] = [
         display: 'TanStack Router ↗',
         color: cyan,
         customCommand:
-          'npm create -- tsrouter-app@latest TARGET_DIR --framework solid --interactive',
+          'npm create -- tsrouter-app@latest TARGET_DIR --framework Solid --interactive',
       },
     ],
   },
@@ -358,7 +358,7 @@ async function init() {
       placeholder: defaultTargetDir,
     })
     if (prompts.isCancel(projectName)) return cancel()
-    targetDir = formatTargetDir(projectName as string)
+    targetDir = formatTargetDir(projectName as string) || defaultTargetDir
   }
 
   // 2. Handle directory if exist and not empty
@@ -613,7 +613,7 @@ function pkgFromUserAgent(userAgent: string | undefined): PkgInfo | undefined {
 
 function setupReactSwc(root: string, isTs: boolean) {
   // renovate: datasource=npm depName=@vitejs/plugin-react-swc
-  const reactSwcPluginVersion = '3.10.0'
+  const reactSwcPluginVersion = '3.10.2'
 
   editFile(path.resolve(root, 'package.json'), (content) => {
     return content.replace(

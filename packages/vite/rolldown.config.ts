@@ -10,8 +10,8 @@ import licensePlugin from './rollupLicensePlugin'
 const pkg = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url)).toString(),
 )
-
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const disableSourceMap = !!process.env.DEBUG_DISABLE_SOURCE_MAP
 
 const envConfig = defineConfig({
   input: path.resolve(__dirname, 'src/client/env.ts'),
@@ -147,6 +147,7 @@ const nodeConfig = defineConfig({
       'Vite',
     ) as Plugin,
     writeTypesPlugin(),
+    enableSourceMapsInWatchModePlugin(),
     externalizeDepsInWatchPlugin(),
   ],
 })
@@ -162,7 +163,7 @@ const moduleRunnerConfig = defineConfig({
     'rollup/parseAst',
     ...Object.keys(pkg.dependencies),
   ],
-  plugins: [bundleSizeLimit(54)],
+  plugins: [bundleSizeLimit(54), enableSourceMapsInWatchModePlugin()],
   output: {
     ...sharedNodeOptions.output,
     minify: {
@@ -181,6 +182,17 @@ export default defineConfig([
 ])
 
 // #region Plugins
+
+function enableSourceMapsInWatchModePlugin(): Plugin {
+  return {
+    name: 'enable-source-maps',
+    outputOptions(options) {
+      if (this.meta.watchMode && !disableSourceMap) {
+        options.sourcemap = 'inline'
+      }
+    },
+  }
+}
 
 function writeTypesPlugin(): Plugin {
   return {
